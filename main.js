@@ -19,18 +19,17 @@ function playerData(name){
 
 function menu(){
 while(running == true){
-    switch(input(
-        "=======================\nMENU\n\n1 - jogar\n2 - player info\n\n0-sair\n=======================\n"
-    )){
+    output("=======================\nMENU\n\n1 - jogar\n2 - player info\n\n0-sair\n=======================\n")
+    switch(input("")){
         case "1":
-
+            game();
         break;
         case "2":
             clearConsole();
             seeScoreandRank();
         break;
         case "0":
-
+        running = false;
         break;
         default:
             output("Não é uma escolha válida");
@@ -65,11 +64,14 @@ function seeScoreandRank(){
     }else if(rank >= 101){
         nivel = "Imortal";
     };
-    output("   " + player.name + "\n\nvitorias: " + player.wins + "\nderrotas: " + player.loser + "\nnivel: " + nivel + "\n");
-    output("O Herói tem de saldo de " + player.wins + " está no nível de " + nivel);
+    
     let menuChoices = true;
     while(menuChoices){
-        switch(input("*{ 1 - menu / 0 - fechar }*\n")){
+        clearConsole()
+        output("   " + player.name + "\n\nvitorias: " + player.wins + "\nderrotas: " + player.loser + "\nnivel: " + nivel + "\n");
+        output("O Herói tem de saldo de " + player.wins + " está no nível de " + nivel);
+        output("*{ 1 - menu / 0 - fechar }*\n")
+        switch(input("")){
             case "1":
                 menuChoices = false
                 break;
@@ -84,6 +86,57 @@ function seeScoreandRank(){
     }
 }
 
+function game(){
+    let head = "  o  ";
+    let legs = " \/ \\  ";
+    let bodyMode = [" |||_"," ||\\\/"," ||\\)","_|||","\\\/|| ","(\/|| "];
+    let n = "\n";
+    let t = "\t";
+    output(head + t + head + n + bodyMode[0] + t + bodyMode[5] + n + legs + t + legs);
+    let menuChoices = true;
+
+    let defineStatus = new Object();
+    defineStatus.Def = 0;
+    defineStatus.Atk = 1;
+    defineStatus.Life = 3;
+
+    let player = defineStatus;
+    let bot = defineStatus;
+
+    while(menuChoices){
+        if (player.Life > 0){
+        output("*{ 1 - ATACAR | 2 - DEFENDER | 3 - SEGURAR DEFESA | 4 - SEGURAR ATAQUE | 0 - FECHAR }*\n");
+        switch(input("")){
+            case '1':
+                if (bot.Def > 0){
+                    bot.life = player.Atk - bot.Def;
+                    bot.Def -= player.Atk;
+                    if (bot.Def < 0){
+                        bot.Def = 0;
+                    };
+                    player.Atk = 0;
+                }
+            break
+            case '2':
+                player.Def = 0;
+            break
+            case '3':
+                player.Def += 1;
+            case '4':
+                player.Atk += 1;
+            break
+            case '0':
+                menuChoices = false;
+            default:
+                output("Não é uma escolha válida");
+            break
+            }
+        }else{
+            menuChoices = false;
+        }
+    }
+}
+
 function start(){
 output("NOME DO JOGADOR: ");
 playerData(input(" "));
@@ -92,4 +145,5 @@ running = true;
 loader(menu);
 }
 
-start()
+game()
+//start()
