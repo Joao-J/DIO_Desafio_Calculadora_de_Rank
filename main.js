@@ -99,25 +99,41 @@ function game(){
     defineStatus.Def = 0;
     defineStatus.Atk = 1;
     defineStatus.Life = 3;
+    defineStatus.ADef = 0;
 
     let player = defineStatus;
     let bot = defineStatus;
 
     while(menuChoices){
-        if (player.Life > 0){
+        if (player.Life > 0 || bot.life > 0){
+        let botChoice = ((Math.floor(Math.random() * ((4) - 1 + 1)) + 1));
+        let bDef = 0;
+        let pDef = 0;
+        let atk = 0;
+        let batk = 0;
+        
+        switch(botChoice){
+            case '1':
+               batk = bot.atk; 
+            break
+            case '2':
+                bot.RDef = bot.Def;
+                bot.Def = 0;
+            break
+            case '3':
+                bot.Def += 1;
+            case '4':
+                bot.Atk += 1;
+            break
+            };
+
         output("*{ 1 - ATACAR | 2 - DEFENDER | 3 - SEGURAR DEFESA | 4 - SEGURAR ATAQUE | 0 - FECHAR }*\n");
         switch(input("")){
             case '1':
-                if (bot.Def > 0){
-                    bot.life = player.Atk - bot.Def;
-                    bot.Def -= player.Atk;
-                    if (bot.Def < 0){
-                        bot.Def = 0;
-                    };
-                    player.Atk = 0;
-                }
+                atk = player.atk;
             break
             case '2':
+                player.RDef = player.Def;
                 player.Def = 0;
             break
             case '3':
@@ -127,10 +143,43 @@ function game(){
             break
             case '0':
                 menuChoices = false;
+                break
             default:
                 output("Não é uma escolha válida");
             break
             }
+        
+            if(atk >= 1){
+                if (bot.RDef > 0){
+                    bot.life = player.Atk - bot.Def;
+                    bot.Def -= player.Atk;
+                        if (bot.Def < 0){
+                    bot.Def = 0;
+                };
+                player.Atk = 0;
+                bot.RDef = 0;
+                atk = 0;
+            }else{
+                bot.life -= bot.life
+            }
+        }
+
+        if(batk >= 1){
+            if (player.RDef > 0){
+                player.life = bot.Atk - player.Def;
+                player.Def -= bot.Atk;
+                if (bot.Def < 0){
+                    bot.Def = 0;
+                };
+                player.RDef = 0;
+                bot.Atk = 0;
+            }else{
+                player.life -= player.RDef;
+            }
+
+            batk = 0;
+        }
+
         }else{
             menuChoices = false;
         }
