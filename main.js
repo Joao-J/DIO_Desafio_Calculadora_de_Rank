@@ -126,18 +126,24 @@ function game(){
     let pMove = 0;
     let bMove = 3;
 
+    msg = [];
+
     while(menuChoices){
         clearConsole();
         if (player.Life <= 0 || bot.Life <= 0){
-            if(player.Life <= 0){
+            if(player.Life == bot.Life){
+                output('OS DOIS MORRERAM!');
+                sleep(3000);
+                clearConsole();
+            }else if(player.Life <= 0){
                 output('VOCÊ MORREU '+ user.name +'!');
                 user.loser += 1;
-                sleep(2000);
+                sleep(3000);
                 clearConsole();
             }else{
                 output("PARABÉNS " + user.name + " VOCÊ GANHOU!");
                 user.wins += 1;
-                sleep(2000);
+                sleep(3000);
                 clearConsole();
             }
             menuChoices = false;
@@ -153,16 +159,20 @@ function game(){
             case 1:
                batk = bot.Atk;
                bMove = 4;
+               msg[1] = "Atacou";
             break;
             case 2:
                 bot.ADef = bot.Def;
                 bMove = 5;
+                msg[1] = "Defendeu";
             break;
             case 3:
                 bot.Def += 1;
+                msg[1] = "Segurou Defesa";
                 break;
             case 4:
                 bot.Atk += 1;
+                msg[1] = "Segurou o Ataque";
             break;
             };
 
@@ -170,16 +180,20 @@ function game(){
             case '1':
                 atk = player.Atk;
                 pMove = 1;
+                msg[0] = "Atacou";
             break
             case '2':
                 player.ADef = player.Def;
                 pMove = 2;
+                msg[0] = "Defendeu";
             break
             case '3':
                 player.Def += 1;
+                msg[0] = "Segurou Defesa";
                 break
             case '4':
                 player.Atk += 1;
+                msg[0] = "Segurou o Ataque";
             break
             case '0':
                 menuChoices = false;
@@ -230,6 +244,7 @@ function game(){
 
         clearConsole();
         output(head + t + head + n + bodyMode[pMove] + t + bodyMode[bMove] + n + legs + t + legs);
+        output("Você: " + msg[0] + t + "Bot: " + msg[1]);
         sleep(1000);
         pMove = 0;
         bMove = 3;
